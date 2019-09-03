@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from zipfile import ZipFile
 from pyunpack import Archive
-
+from matplotlib import rcParams
 
 Archive('dest_2015gw.zip').extractall('~/Desktop/states/')
 
@@ -73,27 +73,29 @@ Mex['coords'] = [coords[0] for coords in Mex['coords']]
 #Absolute representation
 ###
 absolute = Mex.sort_values('Count_rank').reset_index().set_index('Count_rank')
-absolute.plot(column='Count', cmap='YlOrBr', edgecolor='grey').axis('off')
+absolute.plot(column='Count', cmap='YlOrBr', edgecolor='grey', figsize=(10,5)).axis('off')
+
 for idx, row in absolute.iterrows():
     text = plt.annotate(s=idx, xy=row['coords'],horizontalalignment='center')
     text.set_fontsize(5)
-text_list = plt.figtext(0,0.18,absolute['ESTADO'].to_string(), fontsize=5, horizontalalignment='left')
-
-plt.savefig('Total_dis.png', format='png', dpi = 300)
+text_list = plt.figtext(0.82,0.25,absolute['ESTADO'].to_string(header = None), fontsize=5, horizontalalignment='left')
+plt.figtext(0.6,0.8,'Total missing people \n reports in Mexico', fontsize=12, horizontalalignment='center', fontweight= 'semibold')
+#rcParams.update({'figure.autolayout': True})
+plt.savefig('Total_dis.png', format='png', dpi = 300, bbox_inches='tight')
 
 
 ####
 #Relative representation
 ###
 relative = Mex.sort_values('rate_rank').reset_index().set_index('rate_rank')
-relative.plot(column='rate', cmap='YlOrBr', edgecolor='grey').axis('off')
+relative.plot(column='rate', cmap='YlOrBr', edgecolor='grey', figsize=(10,5)).axis('off')
 for idx, row in relative.iterrows():
     text = plt.annotate(s=idx, xy=row['coords'],horizontalalignment='center')
     text.set_fontsize(5)
     
-plt.figtext(0,0.18,relative['ESTADO'].to_string(), fontsize=5, horizontalalignment='left')
-
-plt.savefig('Relative_dis.png', format='png', dpi = 300)
+plt.figtext(0.82,0.25, relative['ESTADO'].to_string(header=None), fontsize=5, horizontalalignment='left')
+plt.figtext(0.6,0.8,'Relative missing people \n reports in Mexico', fontsize=12, horizontalalignment='center', fontweight='semibold')
+plt.savefig('Relative_dis.png', format='png', dpi = 300, bbox_inches='tight')
 
 
 import imageio
